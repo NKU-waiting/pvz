@@ -7,5 +7,8 @@ class CherryBomb : public Plant
 public:
     CherryBomb(QGraphicsPixmapItem *parent = nullptr);
     ~CherryBomb() override;
+    void bomb();
+    void die();
+    int isbomb=0;
 };
 #endif // CHERRYBOMB_H

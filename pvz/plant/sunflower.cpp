@@ -18,7 +18,7 @@ void SunFlower::produceSunshine()
 }
 void SunFlower::timerEvent(QTimerEvent *)
 {
-    if(n/4==0)
+    if(n%4==0)
         produceSunshine();
     n++;
 }

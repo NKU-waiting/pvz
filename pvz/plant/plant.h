@@ -14,7 +14,6 @@ public:
     void setGifPath(const QString &path);
     int HP=300;
     int timerId;
-private:
     QMovie *movie;
 };
 

@@ -13,11 +13,13 @@ public:
     Zombie(const QString path,QGraphicsPixmapItem *parent=nullptr);
     ~Zombie();
     void death();
+    void Burn();
     int ItemKind(QGraphicsItem *item);
     int row;
     QMovie *WalkMovie;
     QMovie *AttackMovie;
     QMovie *DieMovie;
+    QMovie *BurnMovie;
     int HP=270;
     int iswear=0;
     int ZombieKind;
@@ -29,6 +31,7 @@ private slots:
     void updateWalk();
     void updateAttack();
     void updateDie();
+    void updateBurn();
     void Walk();
     void Attack();
     void stopQMovie();

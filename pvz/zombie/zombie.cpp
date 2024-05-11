@@ -11,13 +11,16 @@
 #include"plant/sunflower.h"
 #include"plant/wallnut.h"
 #include"plant/potatomine.h"
+#include"plant/cherrybomb.h"
 #include<QObject>
 Zombie::Zombie(const QString path,QGraphicsPixmapItem *parent)
-    : QGraphicsPixmapItem(parent), WalkMovie(new QMovie(this)),AttackMovie(new QMovie(this)),DieMovie(new QMovie(this))
+    : QGraphicsPixmapItem(parent), WalkMovie(new QMovie(this)),AttackMovie(new QMovie(this)),DieMovie(new QMovie(this)),BurnMovie(new QMovie(this))
 {
     connect(WalkMovie, &QMovie::frameChanged, this, &Zombie::updateWalk);
     connect(AttackMovie, &QMovie::frameChanged, this, &Zombie::updateAttack);
     connect(DieMovie, &QMovie::frameChanged, this, &Zombie::updateDie);
+    connect(BurnMovie, &QMovie::frameChanged, this, &Zombie::updateBurn);
+    BurnMovie->setFileName(":/zombie/images/Burn.gif");
     WalkMovie->setFileName(path);
     WalkMovie->setSpeed(150); // 设置播放速度为正常速度的1.5倍
     WalkMovie->start();
@@ -50,6 +53,10 @@ void Zombie::updateAttack()
 void Zombie::updateDie()
 {
     setPixmap(DieMovie->currentPixmap());
+}
+void Zombie::updateBurn()
+{
+    setPixmap(BurnMovie->currentPixmap());
 }
 void Zombie::stopQMovie()
 {
@@ -90,6 +97,32 @@ void Zombie::timerEvent(QTimerEvent *)
             }
             break;
         }
+        case 3:
+        {
+            PotatoMine* potatoMine = static_cast<PotatoMine*>(item);
+            if(potatoMine->row==this->row)
+            {
+                if(potatoMine->isgrow==1){
+                    potatoMine->bomb();
+                    connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
+                    Burn();
+                }else{
+                    Attack();
+                    potatoMine->HP-=2;
+                    isPlant=1;
+                }
+            }
+            break;
+        }
+        case 4:
+        {
+            CherryBomb *cherryBomb=static_cast<CherryBomb*>(item);
+            if(cherryBomb->isbomb==1)
+            {
+                connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
+                Burn();
+            }
+        }
         default:
             break;
         }
@@ -125,6 +158,8 @@ int Zombie::ItemKind(QGraphicsItem *item)
         return 2;
     if(typeid(*item)==typeid(PotatoMine))
         return 3;
+    if(typeid(*item)==typeid(CherryBomb))
+        return 4;
     return 0;
 }
 void Zombie::death()
@@ -140,11 +175,19 @@ void Zombie::death()
     scene()->addItem(Head);
     QTimer::singleShot(2000, this, &Zombie::killSelf);
 }
+void Zombie::Burn()
+{
+    WalkMovie->stop();
+    AttackMovie->stop();
+    DieMovie->stop();
+    BurnMovie->start();
+}
 void Zombie::killSelf()
 {
     scene()->removeItem(this);
     delete WalkMovie;
     delete AttackMovie;
     delete DieMovie;
+    delete BurnMovie;
     delete this;
 }

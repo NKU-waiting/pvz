@@ -30,6 +30,7 @@
         <file>images/WallNut.png</file>
         <file>images/WallNut1.gif</file>
         <file>images/WallNut2.gif</file>
+        <file>images/Boom.gif</file>
     </qresource>
     <qresource prefix="/zombie">
         <file>images/BucketZombieAttack.gif</file>

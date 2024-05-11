@@ -14,6 +14,8 @@ SOURCES += \
     other/card.cpp \
     other/scene.cpp \
     other/shop.cpp \
+    other/shovel.cpp \
+    other/shovelbank.cpp \
     plant/cherrybomb.cpp \
     plant/pea.cpp \
     plant/peashooter.cpp \
@@ -37,6 +39,8 @@ HEADERS += \
     other/card.h \
     other/scene.h \
     other/shop.h \
+    other/shovel.h \
+    other/shovelbank.h \
     plant/cherrybomb.h \
     plant/pea.h \
     plant/peashooter.h \

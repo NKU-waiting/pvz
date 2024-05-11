@@ -25,6 +25,6 @@ void Plant::setGifPath(const QString &path)
 {
     // 设置 GIF 文件的路径并启动动画
     movie->setFileName(path);
-    movie->setSpeed(150); // 设置播放速度为正常速度的1.5倍
+    movie->setSpeed(100); // 设置播放速度为正常速度的1.5倍
     movie->start();
 }

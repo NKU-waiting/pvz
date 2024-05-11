@@ -2,6 +2,8 @@
 #include"shop.h"
 #include "car.h"
 #include"card.h"
+#include"shovelbank.h"
+#include"shovel.h"
 
 #include"zombie/basiczombie.h"
 #include"zombie/bucketzombie.h"
@@ -31,12 +33,20 @@ Scene::Scene(QGraphicsScene *parent)
     showsunshine->setFont(font);
     showsunshine->setPlainText(QString::number(sunshine));
     addItem(showsunshine);
+
     //小推车
     car *car1=new car;car1->setPos(5,100);addItem(car1);
     car *car2=new car;car2->setPos(5,200);addItem(car2);
     car *car3=new car;car3->setPos(5,300);addItem(car3);
     car *car4=new car;car4->setPos(5,400);addItem(car4);
     car *car5=new car;car5->setPos(5,500);addItem(car5);
+    //铲子
+    ShovelBank *shovelBank=new ShovelBank;
+    shovelBank->setPos(530,10);
+    addItem(shovelBank);
+    Shovel *shovel=new Shovel;
+    addItem(shovel);
+
     //初始时每个格子是可被放置植物的
     for (int i=0;i<5;i++)
     {
@@ -67,7 +77,7 @@ Scene::Scene(QGraphicsScene *parent)
     Wallnutcard->setPos(360,10);Wallnutcard->kind=4;
     addItem(Wallnutcard);
 
-    card *PotatoMinecard=new card(":/plant/images/PotatoMine.png",50,nullptr,0,5);//土豆地雷
+    card *PotatoMinecard=new card(":/plant/images/PotatoMine.png",25,nullptr,0,5);//土豆地雷
     PotatoMinecard->setPos(410,10);PotatoMinecard->kind=5;
     addItem(PotatoMinecard);
 

@@ -1,6 +1,9 @@
 #include "zombie.h"
 #include<QTimer>
 #include"other/scene.h"
+#include"other/car.h"
+#include"other/pause.h"
+#include"other/win.h"
 #include"zombiehead.h"
 #include <QGraphicsPixmapItem>
 #include"plant/pea.h"
@@ -43,7 +46,7 @@ void Zombie::Attack()
 }
 void Zombie::updateWalk()
 {
-    setPos(pos().x()-1.5,pos().y());
+    setPos(pos().x()-walkspeed,pos().y());
     setPixmap(WalkMovie->currentPixmap());
 }
 void Zombie::updateAttack()
@@ -64,7 +67,21 @@ void Zombie::stopQMovie()
 }
 void Zombie::timerEvent(QTimerEvent *)
 {
+    if(!iscontinue)
+    {
+        WalkMovie->stop();
+        return;
+    }
+    if(isWalk)
+        Walk();
+    if(isGamelose==0&&pos().x()<5)
+    {
+        GameLose();isGamelose=1;}
     QList<QGraphicsItem *> items=collidingItems();
+    if(pos().x()<10)
+    {
+        GameLose();
+    }
     for(auto item:items)
     {
         int kind=ItemKind(item);
@@ -79,7 +96,9 @@ void Zombie::timerEvent(QTimerEvent *)
             if(isdead==1&&HP<90)
             {
                 isdead=0;
-                isZombie[row]--;
+                isZombie[row]--;dienumber++;
+                if(dienumber==15)
+                    GameWin();
                 death();
                 killTimer(timerId);
                 return;
@@ -92,7 +111,7 @@ void Zombie::timerEvent(QTimerEvent *)
             if(plant->row==this->row)
             {
                 Attack();
-                plant->HP-=2;
+                plant->HP-=attack;
                 isPlant=1;
             }
             break;
@@ -105,6 +124,11 @@ void Zombie::timerEvent(QTimerEvent *)
                 if(potatoMine->isgrow==1){
                     potatoMine->bomb();
                     connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
+                    isdead=0;
+                    isZombie[row]--;dienumber++;
+                    if(dienumber==15)
+                        GameWin();
+                    killTimer(timerId);
                     Burn();
                 }else{
                     Attack();
@@ -119,9 +143,32 @@ void Zombie::timerEvent(QTimerEvent *)
             CherryBomb *cherryBomb=static_cast<CherryBomb*>(item);
             if(cherryBomb->isbomb==1)
             {
+                isdead=0;
+                isZombie[row]--;dienumber++;
+                if(dienumber==15)
+                    GameWin();
+                killTimer(timerId);
                 connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
                 Burn();
             }
+            break;
+        }
+        case 5:
+        {
+            car *car=static_cast<class car*>(item);
+            if(car->isstart==1)
+            {
+                isdead=0;
+                isZombie[row]--;dienumber++;
+                if(dienumber==15)
+                    GameWin();
+                death();
+                killTimer(timerId);
+                return;
+            }
+            if(car->isstart==0)
+                car->isstart=1;
+            break;
         }
         default:
             break;
@@ -160,6 +207,8 @@ int Zombie::ItemKind(QGraphicsItem *item)
         return 3;
     if(typeid(*item)==typeid(CherryBomb))
         return 4;
+    if(typeid(*item)==typeid(car))
+        return 5;
     return 0;
 }
 void Zombie::death()
@@ -190,4 +239,20 @@ void Zombie::killSelf()
     delete DieMovie;
     delete BurnMovie;
     delete this;
+}
+void Zombie::GameLose()
+{
+    iscontinue=false;
+    QGraphicsPixmapItem *lose=new QGraphicsPixmapItem;
+    lose->setPixmap(QPixmap(":/zombie/images/ZombiesWon.png"));
+    lose->setPos(100,50);
+    scene()->addItem(lose);
+}
+void Zombie::GameWin()
+{
+    iscontinue=false;
+    Win *win=new Win;
+    win->setPixmap(QPixmap(":/zombie/images/ZombiesWon.png"));
+    win->setPos(100,50);
+    scene()->addItem(win);
 }

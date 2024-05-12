@@ -12,10 +12,13 @@ SOURCES += \
     main.cpp \
     other/car.cpp \
     other/card.cpp \
+    other/cardbackground.cpp \
+    other/pause.cpp \
     other/scene.cpp \
     other/shop.cpp \
     other/shovel.cpp \
     other/shovelbank.cpp \
+    other/win.cpp \
     plant/cherrybomb.cpp \
     plant/pea.cpp \
     plant/peashooter.cpp \
@@ -37,10 +40,13 @@ SOURCES += \
 HEADERS += \
     other/car.h \
     other/card.h \
+    other/cardbackground.h \
+    other/pause.h \
     other/scene.h \
     other/shop.h \
     other/shovel.h \
     other/shovelbank.h \
+    other/win.h \
     plant/cherrybomb.h \
     plant/pea.h \
     plant/peashooter.h \

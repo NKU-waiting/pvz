@@ -1,4 +1,5 @@
 #include "pea.h"
+#include"other/pause.h"
 #include<QGraphicsScene>
 Pea::Pea(QGraphicsPixmapItem *parent)
 {
@@ -7,6 +8,8 @@ Pea::Pea(QGraphicsPixmapItem *parent)
 }
 void Pea::timerEvent(QTimerEvent *)
 {
+    if(!iscontinue)
+        return;
     setPos(pos().x()+2,pos().y());
     if(pos().x()>897)
     {

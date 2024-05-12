@@ -5,12 +5,13 @@ PotatoMine::PotatoMine(QGraphicsPixmapItem *parent)
     : Plant(":/plant/images/PotatoMine1.gif", parent)
 {
     setPixmap(QPixmap(":/plant/images/PotatoMine1.gif"));
-    QTimer *timer=new QTimer(this);
+    timer=new QTimer(this);
     timer->setSingleShot(true);
     connect(timer,&QTimer::timeout,this,&PotatoMine::grow);
     timer->start(15000);
     movie->stop();
     timerId = startTimer(20);
+    iskilltimerId=0;
 }
 PotatoMine::~PotatoMine()
 {
@@ -26,22 +27,26 @@ void PotatoMine::bomb()
     if(isbreakout==0){
         movie->stop();movie->setFileName(":/plant/images/PotatoMineBomb.gif");
         movie->start();
-        QTimer *timer=new QTimer(this);
-        connect(timer,&QTimer::timeout,this,&PotatoMine::die);
-        timer->start(500);
+        timer1=new QTimer(this);timer1->setSingleShot(true);
+        connect(timer1,&QTimer::timeout,this,&PotatoMine::die);
+        timer1->start(500);
     }
     isbreakout=1;
 }
 void PotatoMine::die()
 {
-    HP=0;
+    movie->stop();
+    killTimer(timerId);
+    isOccupied[row][line]=1;
+    scene()->removeItem(this);
 }
 void PotatoMine::timerEvent(QTimerEvent *)
 {
-    if(HP<=0)
+    if(!iscontinue)
     {
-        isOccupied[row][line]=1;
-        killTimer(timerId);
-        scene()->removeItem(this);
+        timer->stop();
+        return;
     }
+    if(!timer->isActive())
+        timer->start();
 }

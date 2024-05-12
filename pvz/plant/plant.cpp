@@ -17,7 +17,8 @@ void Plant::update()
     {
         movie->stop();
         isOccupied[row][line]=1;
-        killTimer(timerId);
+        if(iskilltimerId)
+            killTimer(timerId);
         scene()->removeItem(this);
     }
 }

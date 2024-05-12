@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 #include<QMovie>
+#include"other/pause.h"
 class Plant : public QObject,public QGraphicsPixmapItem
 {
 public:
@@ -14,6 +15,7 @@ public:
     void setGifPath(const QString &path);
     int HP=300;
     int timerId;
+    int iskilltimerId=1;
     QMovie *movie;
 };
 

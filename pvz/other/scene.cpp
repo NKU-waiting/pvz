@@ -4,7 +4,7 @@
 #include"card.h"
 #include"shovelbank.h"
 #include"shovel.h"
-
+#include"pause.h"
 #include"zombie/basiczombie.h"
 #include"zombie/bucketzombie.h"
 #include"zombie/conezombie.h"
@@ -13,6 +13,7 @@
 #include <QRandomGenerator>
 #include<QGraphicsTextItem>
 #include<QTimer>
+
 QTimer *timer;
 int number;
 int isZombie[5];
@@ -20,6 +21,8 @@ QVector<int>Linenumbers;
 QVector<int>Kindnumbers;
 int isOccupied[5][9];
 QGraphicsTextItem *showsunshine;
+QGraphicsTextItem *textItem;
+int dienumber=0;
 Scene::Scene(QGraphicsScene *parent)
 {
     setSceneRect(0,0,900,600);
@@ -33,6 +36,17 @@ Scene::Scene(QGraphicsScene *parent)
     showsunshine->setFont(font);
     showsunshine->setPlainText(QString::number(sunshine));
     addItem(showsunshine);
+
+    Pause *pause=new Pause;
+    pause->setPos(630,15);
+    addItem(pause);
+    textItem=new QGraphicsTextItem;
+    textItem->setScale(2);
+    QFont font1; font1.setPointSize(40);
+    textItem->setFont(font);
+    textItem->setPos(645,20);
+    textItem->setPlainText("Pause");
+    addItem(textItem);
 
     //小推车
     car *car1=new car;car1->setPos(5,100);addItem(car1);
@@ -57,32 +71,42 @@ Scene::Scene(QGraphicsScene *parent)
         isZombie[i]=0;
     }
 
-    card *sunflowercard=new card(":/plant/images/SunFlower.png",50,nullptr,3,0,0.4861);//向日葵
+    card *sunflowercard=new card;//向日葵
+    sunflowercard->PlantImagePath=(":/plant/images/SunFlower.png");sunflowercard->Price=50;
     sunflowercard->setPos(160,10);sunflowercard->kind=0;
     addItem(sunflowercard);
 
-    card *Peashootercard=new card(":/plant/images/Peashooter.png",100,nullptr,3);//豌豆射手
-    Peashootercard->setPos(210,10);Peashootercard->kind=1;
+    card *Peashootercard=new card;//豌豆射手
+    Peashootercard->PlantImagePath=(":/plant/images/Peashooter.png");Peashootercard->Price=100;
+    Peashootercard->setPos(212,10);Peashootercard->kind=1;
     addItem(Peashootercard);
 
-    card *SnowPeacard=new card(":/plant/images/SnowPea.png",175,nullptr,3,0,0.5072);//寒冰射手
-    SnowPeacard->setPos(260,10);SnowPeacard->kind=2;
+    card *SnowPeacard=new card;//寒冰射手
+    SnowPeacard->PlantImagePath=(":/plant/images/SnowPea.png");SnowPeacard->Price=175;
+    SnowPeacard->setPos(264,10);SnowPeacard->kind=2;
     addItem(SnowPeacard);
 
-    card *Repeatercard=new card(":/plant/images/Repeater.png",200,nullptr,3,0,0.5072);//双发射手
-    Repeatercard->setPos(310,10);Repeatercard->kind=3;
+    card *Repeatercard=new card;//双发射手
+    Repeatercard->PlantImagePath=(":/plant/images/Repeater.png");Repeatercard->Price=200;
+    Repeatercard->setPos(316,10);Repeatercard->kind=3;
     addItem(Repeatercard);
 
-    card *Wallnutcard=new card(":/plant/images/WallNut.png",50,nullptr,4,0,0.4929);//坚果
-    Wallnutcard->setPos(360,10);Wallnutcard->kind=4;
+    card *Wallnutcard=new card;//坚果
+    Wallnutcard->PlantImagePath=(":/plant/images/WallNut.png");Wallnutcard->Price=50;
+    Wallnutcard->setPos(368,10);Wallnutcard->kind=4;Wallnutcard->cardCD=30000;
+    Wallnutcard->n=600;Wallnutcard->Originaln=600;
     addItem(Wallnutcard);
 
-    card *PotatoMinecard=new card(":/plant/images/PotatoMine.png",25,nullptr,0,5);//土豆地雷
-    PotatoMinecard->setPos(410,10);PotatoMinecard->kind=5;
+    card *PotatoMinecard=new card;//土豆地雷
+    PotatoMinecard->PlantImagePath=(":/plant/images/PotatoMine.png");PotatoMinecard->Price=25;
+    PotatoMinecard->setPos(420,10);PotatoMinecard->kind=5;PotatoMinecard->cardCD=30000;
+    PotatoMinecard->n=600;PotatoMinecard->Originaln=600;
     addItem(PotatoMinecard);
 
-    card *CherryBombcard=new card(":/plant/images/CherryBomb.png",150,nullptr,0,2,0.45);//樱桃炸弹
-    CherryBombcard->setPos(460,10);CherryBombcard->kind=6;
+    card *CherryBombcard=new card;//樱桃炸弹
+    CherryBombcard->PlantImagePath=(":/plant/images/CherryBomb.png");CherryBombcard->Price=150;
+    CherryBombcard->setPos(472,10);CherryBombcard->kind=6;CherryBombcard->cardCD=50000;
+    CherryBombcard->n=1000;CherryBombcard->Originaln=1000;
     addItem(CherryBombcard);
 
     //自动生产僵尸
@@ -90,8 +114,8 @@ Scene::Scene(QGraphicsScene *parent)
     timer->setParent(this);
     connect(timer, &QTimer::timeout, this, &Scene::produceZombie);
     timer->start(7000);//每个僵尸出现间隔
-    Linenumbers = generateRandomNumbers(10,0,4);
-    Kindnumbers =generateRandomNumbers(10,0,10);
+    Linenumbers = generateRandomNumbers(15,0,4);
+    Kindnumbers =generateRandomNumbers(15,0,10);
     number=0;
 }
 QVector<int> Scene:: generateRandomNumbers(int count, int min, int max) {
@@ -103,6 +127,8 @@ QVector<int> Scene:: generateRandomNumbers(int count, int min, int max) {
 }
 void Scene::produceZombie()
 {
+    if(!iscontinue)
+        return;
     switch (Kindnumbers[number])
     {
     case 0:case 1:case 2:case 3:case 4:

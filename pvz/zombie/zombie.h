@@ -5,7 +5,6 @@
 #include <QGraphicsPixmapItem>
 #include<QMovie>
 #include<QTimerEvent>
-#include"plant/plant.h"
 class Zombie: public QObject,public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -14,17 +13,22 @@ public:
     ~Zombie();
     void death();
     void Burn();
+    void GameLose();
+    void GameWin();
     int ItemKind(QGraphicsItem *item);
     int row;
     QMovie *WalkMovie;
     QMovie *AttackMovie;
     QMovie *DieMovie;
     QMovie *BurnMovie;
+    double walkspeed=1.5;
+    int attack=2;
     int HP=270;
     int iswear=0;
     int ZombieKind;
     int isWalk=1;
     int isPlant=0;
+    int isGamelose=0;
 protected:
     virtual void timerEvent(QTimerEvent *event) override;
 private slots:

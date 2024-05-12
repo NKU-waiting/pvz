@@ -1,10 +1,10 @@
 #include "card.h"
 #include"shop.h"
 #include"scene.h"
-#include <QGraphicsItemGroup>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 #include<QPointF>
+#include<QGraphicsRectItem>
 #include"plant/sunflower.h"
 #include"plant/cherrybomb.h"
 #include"plant/peashooter.h"
@@ -12,33 +12,31 @@
 #include"plant/snowpea.h"
 #include"plant/repeater.h"
 #include"plant/potatomine.h"
-
-card::card(const QString &plantImagePath, const int price,QGraphicsItem *parent,int x_value,int y_value,double Scale)
-
-    : QGraphicsItemGroup(parent),x(x_value),y(y_value),scale(Scale),Price(price),PlantImagePath(plantImagePath)
+card::card(QGraphicsItem *)
+    :timer(new QTimer(this))
 {
-    //卡片背景
-    QPixmap backgroundPixmap(":/other/images/Card.png");
-    QGraphicsPixmapItem *backgroundItem = new QGraphicsPixmapItem(backgroundPixmap);
-    backgroundItem->setScale(0.5);
-    addToGroup(backgroundItem);
-    //植物
-    QPixmap plantPixmap(plantImagePath);
-    QGraphicsPixmapItem *plantItem = new QGraphicsPixmapItem(plantPixmap);
-    plantItem->setScale(scale);
-    plantItem->setPos(5+x, 15+y); // 设置植物图片在卡片上的位置
-    addToGroup(plantItem);
-    //植物价格
-    QGraphicsTextItem *plantprice=new QGraphicsTextItem;
-    plantprice->setPlainText(QString::number(price));
-    plantprice->setPos(0,49);
-    addToGroup(plantprice);
     setFlag(QGraphicsItem::ItemIsMovable, true);
+    connect(timer,&QTimer::timeout,this,&card::updatemap);
+}
+void card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+    painter->drawPixmap(QRect(0,0, 50,70), QPixmap(":/other/images/Card.png"));
+    painter->drawPixmap(QRect(10, 15, 30, 35), QPixmap(PlantImagePath));
+    painter->drawText(5,65, QString::number(Price));
+    if (isblack)
+    {
+        QBrush brush(QColor(0, 0, 0, 200));
+        painter->setBrush(brush);
+        painter->drawRect(QRectF(0,0,50,70*qreal(n)/Originaln));
+        isblack=0;
+    }
 }
 void card::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     OriginalPosition = pos();
-    QGraphicsItemGroup::mousePressEvent(event);
+    QGraphicsItem::mousePressEvent(event);
 }
 void card::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -48,10 +46,12 @@ void card::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     setPos(delta+this->pos());
     if(tempCard==NULL)
     {
-        tempCard = new card(PlantImagePath,Price,nullptr);
+        tempCard = new card;
+        tempCard->PlantImagePath=this->PlantImagePath;
+        tempCard->Price=this->Price;
         tempCard->setPos(OriginalPosition);
         scene()->addItem(tempCard);}
-    QGraphicsItemGroup::mouseMoveEvent(event);
+    QGraphicsItem::mouseMoveEvent(event);
 }
 void card::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -62,11 +62,11 @@ void card::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         tempCard = nullptr;}
     setPos(OriginalPosition);
     setPlant(event->scenePos());
-    QGraphicsItemGroup::mouseReleaseEvent(event);
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 void card::setPlant(QPointF position)
 {
-    if(position.x()-75>=0&&position.y()-94>=0)
+    if(isPlant&&position.x()-75>=0&&position.y()-94>=0)
     {
         int line=(position.x()-94)/82,row=(position.y()-75)/100;
         if(0<=row&&row<5&&0<=line&&line<9&&isOccupied[row][line]==1&&sunshine>=Price)
@@ -125,6 +125,31 @@ void card::setPlant(QPointF position)
             isOccupied[row][line]=0;
             sunshine-=Price;
             showsunshine->setPlainText(QString::number(sunshine));
+            isPlant--;
+            CardCD();
         }
     }
 }
+void card::CardCD()
+{
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+    timer->start(50);
+    isblack=1;
+}
+void card::updatemap()
+{
+    if(!iscontinue)
+        return;
+    isblack=1;
+    update();
+    n--;
+    if(n==0)
+    {
+        isPlant=1;
+        isblack=0;
+        timer->stop();
+        setFlag(QGraphicsItem::ItemIsMovable, true);
+        n=Originaln;
+    }
+}
+

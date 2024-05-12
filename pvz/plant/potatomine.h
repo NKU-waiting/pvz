@@ -13,6 +13,8 @@ public:
     void die();
     int isgrow=0;
     int isbreakout=0;
+    QTimer *timer;
+    QTimer *timer1;
 protected:
     virtual void timerEvent(QTimerEvent *event) override;
 };

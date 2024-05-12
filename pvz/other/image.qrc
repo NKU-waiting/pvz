@@ -7,6 +7,8 @@
         <file>images/Shop.png</file>
         <file>images/Shovel.png</file>
         <file>images/ShovelBank.png</file>
+        <file>images/PVZ.ico</file>
+        <file>images/win.png</file>
     </qresource>
     <qresource prefix="/plant">
         <file>images/SunFlower.png</file>

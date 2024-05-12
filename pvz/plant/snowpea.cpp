@@ -17,6 +17,8 @@ void SnowPea::producePea()
 }
 void SnowPea::timerEvent(QTimerEvent *)
 {
+    if(!iscontinue)
+        return;
     if(isZombie[row]>0)
     {
         producePea();

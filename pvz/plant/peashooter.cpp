@@ -19,6 +19,8 @@ void PeaShooter::producePea()
 }
 void PeaShooter::timerEvent(QTimerEvent *)
 {
+    if(!iscontinue)
+        return;
     if(isZombie[row]>0)
     {
         producePea();

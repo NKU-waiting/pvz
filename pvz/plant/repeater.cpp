@@ -1,4 +1,5 @@
 #include "repeater.h"
+#include"other/pause.h"
 #include"pea.h"
 #include"other/scene.h"
 Repeater::Repeater(QGraphicsPixmapItem *parent)
@@ -18,6 +19,8 @@ void Repeater::producePea()
 }
 void Repeater::timerEvent(QTimerEvent *)
 {
+    if(!iscontinue)
+        return;
     if(isZombie[row]>0)
     {
         producePea();

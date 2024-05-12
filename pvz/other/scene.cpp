@@ -22,9 +22,10 @@ QVector<int>Kindnumbers;
 int isOccupied[5][9];
 QGraphicsTextItem *showsunshine;
 QGraphicsTextItem *textItem;
-int dienumber=0;
+int dienumber;
 Scene::Scene(QGraphicsScene *parent)
 {
+    dienumber=0;
     setSceneRect(0,0,900,600);
     setBackgroundBrush(QImage(":/other/images/background.png"));
     //商店并显示阳光数量
@@ -171,7 +172,7 @@ void Scene::produceZombie()
         break;
     }
     number++;
-    if(number==10)
+    if(number==15)
     {
         timer->stop();
     }

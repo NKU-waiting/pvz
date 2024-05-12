@@ -72,9 +72,10 @@ void Zombie::timerEvent(QTimerEvent *)
         WalkMovie->stop();
         return;
     }
+    GameWin();GameLose();
     if(isWalk)
         Walk();
-    if(isGamelose==0&&pos().x()<5)
+    if(isGamelose==0&&pos().x()<=0)
     {
         GameLose();isGamelose=1;}
     QList<QGraphicsItem *> items=collidingItems();
@@ -97,7 +98,8 @@ void Zombie::timerEvent(QTimerEvent *)
             {
                 isdead=0;
                 isZombie[row]--;dienumber++;
-                if(dienumber==15)
+                qDebug()<<dienumber;
+                if(dienumber==14)
                     GameWin();
                 death();
                 killTimer(timerId);
@@ -126,7 +128,8 @@ void Zombie::timerEvent(QTimerEvent *)
                     connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
                     isdead=0;
                     isZombie[row]--;dienumber++;
-                    if(dienumber==15)
+                    qDebug()<<dienumber;
+                    if(dienumber==14)
                         GameWin();
                     killTimer(timerId);
                     Burn();
@@ -145,7 +148,8 @@ void Zombie::timerEvent(QTimerEvent *)
             {
                 isdead=0;
                 isZombie[row]--;dienumber++;
-                if(dienumber==15)
+                qDebug()<<dienumber;
+                if(dienumber==14)
                     GameWin();
                 killTimer(timerId);
                 connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
@@ -160,7 +164,8 @@ void Zombie::timerEvent(QTimerEvent *)
             {
                 isdead=0;
                 isZombie[row]--;dienumber++;
-                if(dienumber==15)
+                qDebug()<<dienumber;
+                if(dienumber==14)
                     GameWin();
                 death();
                 killTimer(timerId);
@@ -245,14 +250,15 @@ void Zombie::GameLose()
     iscontinue=false;
     QGraphicsPixmapItem *lose=new QGraphicsPixmapItem;
     lose->setPixmap(QPixmap(":/zombie/images/ZombiesWon.png"));
-    lose->setPos(100,50);
+    lose->setScale(1);
+    lose->setPos(200,50);
     scene()->addItem(lose);
 }
 void Zombie::GameWin()
 {
     iscontinue=false;
     Win *win=new Win;
-    win->setPixmap(QPixmap(":/zombie/images/ZombiesWon.png"));
-    win->setPos(100,50);
+    win->setPixmap(QPixmap(":/other/images/win.png"));
+    win->setPos(300,100);
     scene()->addItem(win);
 }

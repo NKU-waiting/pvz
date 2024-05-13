@@ -3,9 +3,10 @@
 #include"pea.h"
 #include"other/scene.h"
 PeaShooter::PeaShooter(QGraphicsPixmapItem *parent)
-    : Plant(":/plant/images/Peashooter.gif", parent)
+    : Plant(":/fangzhou/images/keluosiAttack.gif", parent)
 {
-    timerId = startTimer(1400);
+    setScale(0.15);
+    timerId = startTimer(700);
 }
 
 PeaShooter::~PeaShooter()
@@ -14,7 +15,7 @@ PeaShooter::~PeaShooter()
 void PeaShooter::producePea()
 {
     Pea *pea=new Pea;
-    pea->setPos(pos().x()+50,pos().y()+5);
+    pea->setPos(pos().x()+50,pos().y()+15);
     scene()->addItem(pea);
 }
 void PeaShooter::timerEvent(QTimerEvent *)

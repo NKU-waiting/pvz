@@ -23,7 +23,7 @@ int isOccupied[5][9];
 QGraphicsTextItem *showsunshine;
 QGraphicsTextItem *textItem;
 int dienumber;
-Scene::Scene(QGraphicsScene *parent)
+Scene::Scene(QGraphicsScene *)
 {
     dienumber=0;
     setSceneRect(0,0,900,600);
@@ -50,11 +50,11 @@ Scene::Scene(QGraphicsScene *parent)
     addItem(textItem);
 
     //小推车
-    car *car1=new car;car1->setPos(5,100);addItem(car1);
-    car *car2=new car;car2->setPos(5,200);addItem(car2);
-    car *car3=new car;car3->setPos(5,300);addItem(car3);
-    car *car4=new car;car4->setPos(5,400);addItem(car4);
-    car *car5=new car;car5->setPos(5,500);addItem(car5);
+    car *car1=new car;car1->setPos(5,100);addItem(car1);car1->row=0;
+    car *car2=new car;car2->setPos(5,200);addItem(car2);car2->row=1;
+    car *car3=new car;car3->setPos(5,300);addItem(car3);car3->row=2;
+    car *car4=new car;car4->setPos(5,400);addItem(car4);car4->row=3;
+    car *car5=new car;car5->setPos(5,500);addItem(car5);car5->row=4;
     //铲子
     ShovelBank *shovelBank=new ShovelBank;
     shovelBank->setPos(530,10);
@@ -78,17 +78,17 @@ Scene::Scene(QGraphicsScene *parent)
     addItem(sunflowercard);
 
     card *Peashootercard=new card;//豌豆射手
-    Peashootercard->PlantImagePath=(":/plant/images/Peashooter.png");Peashootercard->Price=100;
+    Peashootercard->PlantImagePath=(":/fangzhou/images/keluosi.png");Peashootercard->Price=100;
     Peashootercard->setPos(212,10);Peashootercard->kind=1;
     addItem(Peashootercard);
 
     card *SnowPeacard=new card;//寒冰射手
-    SnowPeacard->PlantImagePath=(":/plant/images/SnowPea.png");SnowPeacard->Price=175;
+    SnowPeacard->PlantImagePath=(":/fangzhou/images/hanmang.png");SnowPeacard->Price=175;
     SnowPeacard->setPos(264,10);SnowPeacard->kind=2;
     addItem(SnowPeacard);
 
     card *Repeatercard=new card;//双发射手
-    Repeatercard->PlantImagePath=(":/plant/images/Repeater.png");Repeatercard->Price=200;
+    Repeatercard->PlantImagePath=(":/fangzhou/images/nengtainshi.png");Repeatercard->Price=200;
     Repeatercard->setPos(316,10);Repeatercard->kind=3;
     addItem(Repeatercard);
 

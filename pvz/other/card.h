@@ -1,6 +1,5 @@
 #ifndef CARD_H
 #define CARD_H
-
 #include<QGraphicsItem>
 #include<QPainter>
 #include<QTimer>

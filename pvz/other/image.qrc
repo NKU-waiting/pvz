@@ -33,6 +33,7 @@
         <file>images/WallNut1.gif</file>
         <file>images/WallNut2.gif</file>
         <file>images/Boom.gif</file>
+        <file>images/keluosiAttack.gif</file>
     </qresource>
     <qresource prefix="/zombie">
         <file>images/BucketZombieAttack.gif</file>
@@ -51,5 +52,13 @@
         <file>images/ZombieWalk1.gif</file>
         <file>images/ZombieWalk2.gif</file>
         <file>images/ZombiesWon.png</file>
+    </qresource>
+    <qresource prefix="/fangzhou">
+        <file>images/keluosiAttack.gif</file>
+        <file>images/nengtianshiAttack.gif</file>
+        <file>images/hanmangAttack.gif</file>
+        <file>images/keluosi.png</file>
+        <file>images/hanmang.png</file>
+        <file>images/nengtainshi.png</file>
     </qresource>
 </RCC>

@@ -2,9 +2,10 @@
 #include"peasnow.h"
 #include"other/scene.h"
 SnowPea::SnowPea(QGraphicsPixmapItem *parent)
-    : Plant(":/plant/images/SnowPea.gif", parent)
+    : Plant(":/fangzhou/images/hanmangAttack.gif", parent)
 {
-    timerId = startTimer(1400);
+    setScale(0.35);
+    timerId = startTimer(700);
 }
 SnowPea::~SnowPea()
 {
@@ -12,7 +13,7 @@ SnowPea::~SnowPea()
 void SnowPea::producePea()
 {
     PeaSnow *pea=new PeaSnow;
-    pea->setPos(pos().x()+50,pos().y()+5);
+    pea->setPos(pos().x()+50,pos().y()+15);
     scene()->addItem(pea);
 }
 void SnowPea::timerEvent(QTimerEvent *)

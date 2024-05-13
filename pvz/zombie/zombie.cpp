@@ -70,19 +70,15 @@ void Zombie::timerEvent(QTimerEvent *)
     if(!iscontinue)
     {
         WalkMovie->stop();
+        AttackMovie->stop();
         return;
     }
-    GameWin();GameLose();
     if(isWalk)
         Walk();
-    if(isGamelose==0&&pos().x()<=0)
+    if(isGamelose==0&&pos().x()<-100)
     {
         GameLose();isGamelose=1;}
     QList<QGraphicsItem *> items=collidingItems();
-    if(pos().x()<10)
-    {
-        GameLose();
-    }
     for(auto item:items)
     {
         int kind=ItemKind(item);
@@ -93,12 +89,11 @@ void Zombie::timerEvent(QTimerEvent *)
         {
             scene()->removeItem(item);
             delete item;
-            HP-=20;
+            HP-=10;
             if(isdead==1&&HP<90)
             {
                 isdead=0;
                 isZombie[row]--;dienumber++;
-                qDebug()<<dienumber;
                 if(dienumber==14)
                     GameWin();
                 death();
@@ -128,7 +123,6 @@ void Zombie::timerEvent(QTimerEvent *)
                     connect(BurnMovie, &QMovie::finished,this,&Zombie::killSelf);
                     isdead=0;
                     isZombie[row]--;dienumber++;
-                    qDebug()<<dienumber;
                     if(dienumber==14)
                         GameWin();
                     killTimer(timerId);
@@ -148,7 +142,6 @@ void Zombie::timerEvent(QTimerEvent *)
             {
                 isdead=0;
                 isZombie[row]--;dienumber++;
-                qDebug()<<dienumber;
                 if(dienumber==14)
                     GameWin();
                 killTimer(timerId);
@@ -160,18 +153,17 @@ void Zombie::timerEvent(QTimerEvent *)
         case 5:
         {
             car *car=static_cast<class car*>(item);
-            if(car->isstart==1)
+            if(car->isstart==1&&car->row==row)
             {
                 isdead=0;
                 isZombie[row]--;dienumber++;
-                qDebug()<<dienumber;
                 if(dienumber==14)
                     GameWin();
                 death();
                 killTimer(timerId);
                 return;
             }
-            if(car->isstart==0)
+            if(car->isstart==0&&car->row==row)
                 car->isstart=1;
             break;
         }

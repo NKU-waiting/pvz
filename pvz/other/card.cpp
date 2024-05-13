@@ -23,7 +23,7 @@ void card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(option)
     Q_UNUSED(widget)
     painter->drawPixmap(QRect(0,0, 50,70), QPixmap(":/other/images/Card.png"));
-    painter->drawPixmap(QRect(10, 15, 30, 35), QPixmap(PlantImagePath));
+    painter->drawPixmap(QRect(10, 12, 26.8, 40), QPixmap(PlantImagePath));
     painter->drawText(5,65, QString::number(Price));
     if (isblack)
     {
@@ -152,4 +152,3 @@ void card::updatemap()
         n=Originaln;
     }
 }
-

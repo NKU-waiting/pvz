@@ -7,6 +7,7 @@ class car:public QObject,public QGraphicsPixmapItem
 public:
     car(QGraphicsPixmapItem *parent=nullptr);
     int isstart=0;
+    int row;
 protected:
     virtual void timerEvent(QTimerEvent *event) override;
 };

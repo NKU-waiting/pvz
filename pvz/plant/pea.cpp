@@ -10,7 +10,7 @@ void Pea::timerEvent(QTimerEvent *)
 {
     if(!iscontinue)
         return;
-    setPos(pos().x()+2,pos().y());
+    setPos(pos().x()+3,pos().y());
     if(pos().x()>897)
     {
         scene()->removeItem(this);

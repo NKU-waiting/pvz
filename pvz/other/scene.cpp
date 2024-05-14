@@ -115,7 +115,7 @@ Scene::Scene(QGraphicsScene *)
     timer->setParent(this);
     connect(timer, &QTimer::timeout, this, &Scene::produceZombie);
     timer->start(7000);//每个僵尸出现间隔
-    Linenumbers = generateRandomNumbers(15,0,4);
+    Linenumbers = generateRandomNumbers(15,1,4);
     Kindnumbers =generateRandomNumbers(15,0,10);
     number=0;
 }
